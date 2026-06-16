@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AllMyFunds — Bienvenue</title>
+<script src="amf.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+@font-face{
+  font-family:'Cal Sans';font-style:normal;font-weight:400 700;font-display:swap;
+  src:url('https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/files/cal-sans-latin-400-normal.woff2') format('woff2');
+}
+:root{
+  --navy:#002D69;--blue:#004AAD;--blue-dark:#003a87;--sky:#0BA5FF;--tint:#E6F6FF;
+  --ink:#0a0a0a;--gray:#5a6475;--gray-soft:#8a93a3;
+  --line:#e3e6ee;--field:#f4f6fb;
+  --font-display:'Cal Sans','Outfit',system-ui,sans-serif;
+  --font-body:'Outfit',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit;text-decoration:none}
+
+.ob{height:100vh;display:grid;grid-template-columns:42% 58%;overflow:hidden}
+
+/* ---- Brand side ---- */
+.brand{position:relative;overflow:hidden;color:#fff;padding:48px 44px;
+  background:linear-gradient(120deg,var(--navy) 0%,#013a8e 55%,var(--blue) 100%);
+  display:flex;flex-direction:column;justify-content:center}
+.brand::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 78% at 100% 0%, rgba(11,165,255,.34), transparent 60%)}
+.brand::after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;
+  background:rgba(255,255,255,.05);bottom:-120px;left:-120px}
+.brand-logo{position:absolute;top:46px;left:44px;font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.02em;z-index:3}
+.brand-body{position:relative;z-index:2}
+.brand .eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9fc6ff;margin-bottom:14px}
+.brand h1{font-family:var(--font-display);font-size:clamp(28px,2.8vw,42px);font-weight:700;line-height:1.12;letter-spacing:-.02em}
+.brand .sub{margin-top:16px;font-size:16px;color:#cfe6ff;max-width:380px}
+.brand .steps{list-style:none;margin-top:34px;display:flex;flex-direction:column;gap:14px}
+.brand .steps li{display:flex;align-items:center;gap:13px;font-size:14.5px;font-weight:500;color:#bcd5f6;transition:.2s}
+.brand .steps li .num{width:26px;height:26px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;background:rgba(255,255,255,.12);color:#cfe6ff}
+.brand .steps li.done .num,.brand .steps li.current .num{background:#fff;color:var(--blue)}
+.brand .steps li.current{color:#fff}
+
+/* ---- Form side ---- */
+.form-side{display:flex;flex-direction:column;height:100vh;padding:40px clamp(28px,4vw,72px)}
+.progress{height:6px;background:var(--field);border-radius:99px;overflow:hidden;margin-bottom:34px;flex:0 0 auto}
+.progress > i{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--blue),var(--sky));border-radius:99px;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;overflow-y:auto}
+.step-k{font-size:13px;font-weight:600;color:var(--gray-soft);margin-bottom:7px}
+.stage h2{font-family:var(--font-display);font-size:clamp(22px,2.2vw,30px);font-weight:600;color:var(--navy);letter-spacing:-.02em;line-height:1.15}
+.stage .lead{color:var(--gray);font-size:15px;margin:9px 0 26px;max-width:460px}
+
+.opts{display:flex;flex-direction:column;gap:12px;max-width:520px}
+.opt{display:flex;align-items:flex-start;gap:14px;border:1.6px solid var(--line);background:#fff;border-radius:14px;
+  padding:16px 18px;cursor:pointer;text-align:left;font-family:inherit;transition:.16s;width:100%}
+.opt:hover{border-color:#b9cdf0;background:#fafcff}
+.opt.sel{border-color:var(--blue);background:#f3f8ff;box-shadow:0 0 0 3px rgba(0,74,173,.1)}
+.opt .mk{width:22px;height:22px;border-radius:50%;flex:0 0 auto;border:2px solid var(--line);margin-top:1px;
+  display:flex;align-items:center;justify-content:center;transition:.16s}
+.opt.sel .mk{border-color:var(--blue);background:var(--blue)}
+.opt .mk svg{opacity:0;transition:.16s}
+.opt.sel .mk svg{opacity:1}
+.opt.multi .mk{border-radius:7px}
+.opt .ot{flex:1;min-width:0}
+.opt .ot b{display:block;font-size:15.5px;font-weight:600;color:var(--ink)}
+.opt .ot span{display:block;font-size:13.5px;color:var(--gray);margin-top:2px}
+
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:30px;flex:0 0 auto}
+.btn-back{display:inline-flex;align-items:center;gap:7px;color:var(--gray);font-size:14.5px;font-weight:600;
+  background:none;border:none;cursor:pointer;font-family:inherit;padding:10px 4px}
+.btn-back:hover{color:var(--blue)}
+.btn-back[hidden]{visibility:hidden}
+.btn-next{height:50px;padding:0 30px;background:var(--blue);color:#fff;border:none;border-radius:13px;
+  font-family:inherit;font-size:15.5px;font-weight:600;cursor:pointer;
+  box-shadow:0 14px 26px -14px rgba(0,74,173,.7);transition:.18s}
+.btn-next:hover:not(:disabled){background:var(--navy);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+@media(max-width:900px){
+  .ob{grid-template-columns:1fr;height:auto;min-height:100vh}
+  .brand{padding:26px 26px 30px;justify-content:flex-start}
+  .brand-logo{position:static;margin-bottom:22px}
+  .brand .steps{display:none}
+  .brand h1{font-size:24px}
+  .form-side{height:auto;padding:30px 22px 44px}
+  .stage{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="ob">
+
+  <aside class="brand">
+    <div class="brand-logo">AllMyFunds</div>
+    <div class="brand-body">
+      <div class="eyebrow">Configuration du compte</div>
+      <h1>Faisons connaissance.</h1>
+      <p class="sub">Cinq questions rapides pour adapter vos analyses, vos conseils et votre tableau de bord à votre profil.</p>
+      <ul class="steps" id="brandSteps">
+        <li data-i="0"><span class="num">1</span> Tolérance au risque</li>
+        <li data-i="1"><span class="num">2</span> Horizon de placement</li>
+        <li data-i="2"><span class="num">3</span> Niveau d'expérience</li>
+        <li data-i="3"><span class="num">4</span> Vos objectifs</li>
+        <li data-i="4"><span class="num">5</span> Ton des conseils</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="form-side">
+    <div class="progress"><i id="bar"></i></div>
+    <section class="stage" id="stage"></section>
+    <div class="nav">
+      <button class="btn-back" id="back" type="button" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Retour
+      </button>
+      <button class="btn-next" id="next" type="button" disabled>Continuer</button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var CK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+  var STEPS=[
+    { key:'risk', kicker:'Étape 1 sur 5', title:'Quelle est votre tolérance au risque ?',
+      lead:'Cela nous aide à calibrer le niveau de volatilité de vos recommandations.', type:'single',
+      opts:[
+        ['prudent','Prudent','Je privilégie la sécurité, quitte à gagner moins.'],
+        ['equilibre','Équilibré','Je recherche un compromis entre risque et rendement.'],
+        ['dynamique','Dynamique','J\'accepte de fortes variations pour viser plus de rendement.']
+      ] },
+    { key:'horizon', kicker:'Étape 2 sur 5', title:'Sur quel horizon investissez-vous ?',
+      lead:'La durée de placement oriente la stratégie proposée.', type:'single',
+      opts:[
+        ['court','Court terme','Moins de 3 ans'],
+        ['moyen','Moyen terme','3 à 8 ans'],
+        ['long','Long terme','Plus de 8 ans']
+      ] },
+    { key:'experience', kicker:'Étape 3 sur 5', title:'Quel est votre niveau d\'expérience ?',
+      lead:'Pour ajuster le niveau de détail des explications.', type:'single',
+      opts:[
+        ['debutant','Débutant','Je découvre l\'investissement.'],
+        ['intermediaire','Intermédiaire','Je connais les bases.'],
+        ['confirme','Confirmé','Je gère activement mes placements.']
+      ] },
+    { key:'goals', kicker:'Étape 4 sur 5', title:'Quels sont vos objectifs ?',
+      lead:'Sélectionnez tout ce qui vous correspond.', type:'multi',
+      opts:[
+        ['retraite','Préparer ma retraite',''],
+        ['fructifier','Faire fructifier mon épargne',''],
+        ['immo','Constituer un apport immobilier',''],
+        ['revenus','Générer des revenus complémentaires',''],
+        ['transmission','Transmettre mon patrimoine',''],
+        ['fiscalite','Optimiser ma fiscalité','']
+      ] },
+    { key:'tone', kicker:'Étape 5 sur 5', title:'Quel ton préférez-vous pour les conseils ?',
+      lead:'Dernière question, puis direction votre tableau de bord.', type:'single',
+      opts:[
+        ['concis','Concis','Droit au but, l\'essentiel.'],
+        ['pedagogique','Pédagogique','Des explications claires et accessibles.'],
+        ['detaille','Détaillé','Analyses approfondies et chiffrées.']
+      ] }
+  ];
+
+  var answers={ goals:{} };
+  var i=0;
+
+  var stage=document.getElementById('stage'),
+      bar=document.getElementById('bar'),
+      back=document.getElementById('back'),
+      next=document.getElementById('next'),
+      brandSteps=document.querySelectorAll('#brandSteps li');
+
+  function selected(step){
+    if(step.type==='multi'){ return Object.keys(answers.goals).filter(function(k){return answers.goals[k];}).length>0; }
+    return !!answers[step.key];
+  }
+
+  function render(){
+    var step=STEPS[i];
+    bar.style.width=((i+1)/STEPS.length*100)+'%';
+    brandSteps.forEach(function(li){
+      var idx=+li.dataset.i;
+      li.classList.toggle('done',idx<i);
+      li.classList.toggle('current',idx===i);
+      var num=li.querySelector('.num');
+      num.innerHTML = idx<i ? CK : (idx+1);
+    });
+
+    var html='<div class="step-k">'+step.kicker+'</div>'+
+             '<h2>'+step.title+'</h2>'+
+             '<p class="lead">'+step.lead+'</p><div class="opts">';
+    step.opts.forEach(function(o){
+      var val=o[0], sel;
+      if(step.type==='multi'){ sel=!!answers.goals[val]; }
+      else { sel=answers[step.key]===val; }
+      html+='<button type="button" class="opt'+(step.type==='multi'?' multi':'')+(sel?' sel':'')+'" data-val="'+val+'">'+
+              '<span class="mk">'+CK+'</span>'+
+              '<span class="ot"><b>'+o[1]+'</b>'+(o[2]?'<span>'+o[2]+'</span>':'')+'</span>'+
+            '</button>';
+    });
+    html+='</div>';
+    stage.innerHTML=html;
+
+    stage.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var val=btn.dataset.val;
+        if(step.type==='multi'){
+          answers.goals[val]=!answers.goals[val];
+          btn.classList.toggle('sel',answers.goals[val]);
+        } else {
+          answers[step.key]=val;
+          stage.querySelectorAll('.opt').forEach(function(x){x.classList.remove('sel');});
+          btn.classList.add('sel');
+        }
+        refreshNav();
+      });
+    });
+
+    back.hidden = i===0;
+    next.textContent = i===STEPS.length-1 ? 'Terminer' : 'Continuer';
+    refreshNav();
+  }
+
+  function refreshNav(){ next.disabled = !selected(STEPS[i]); }
+
+  back.addEventListener('click',function(){ if(i>0){ i--; render(); } });
+  next.addEventListener('click',function(){
+    if(!selected(STEPS[i])) return;
+    if(i<STEPS.length-1){ i++; render(); return; }
+    // dernière étape -> enregistrer le profil et marquer l'onboarding fait
+    var goalsArr = Object.keys(answers.goals).filter(function(k){return answers.goals[k];});
+    var profile={
+      risk:answers.risk, horizon:answers.horizon, exp:answers.experience,
+      goals:goalsArr, reaction:'hold',
+      esg:false, europe:false, crypto:false, exclude:false, tone:answers.tone
+    };
+    if(window.AMF) AMF.completeOnboarding(profile);
+    window.location.href='dashboard.html';
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
